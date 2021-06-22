@@ -41,7 +41,7 @@ jobs:
       #- uses: actions/download-artifact@v2
       #  with:
       #    name: build-${{ github.event.workflow_run.head_branch }}
-
+      - run: echo Deploy Alias = ${{ github.event.workflow_run.head_branch }}
       - uses: jsmrcaga/action-netlify-deploy@master
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
