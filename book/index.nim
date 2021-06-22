@@ -4,7 +4,7 @@ nbInit()
 nbUseNimibook
 
 nbText: """
-# Introduction
+## Introduction
 
 This is the SciNim getting started book.
 
