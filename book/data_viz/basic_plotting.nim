@@ -7,6 +7,12 @@ nbUseNimibook
 nbText: """
 # Simple plotting using [ggplotnim](https://github.com/Vindaar/ggplotnim)
 
+# This header is new in this PR and will hopefully be visible in a preview.........
+
+# This is an even newer header!!!!!!
+
+## This will hopefully be the newest header for all eternity (fingers crossed)
+
 ## Line plot
 """
 
