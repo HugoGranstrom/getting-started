@@ -16,12 +16,10 @@ jobs:
       - run: nimble install -y
       - name: GenBook
         run: nimble genbook
-      - name: Save PR number
-        run: |
-          echo ${{ github.event.number }} > ./docs/NR
+      - run: echo Commit hash = ${{ github.event.pull_request.head.sha }}
       - uses: actions/upload-artifact@v2
         with:
-          name: build-${{ github.head_ref }}
+          name: build-${{ github.event.pull_request.head.sha }}
           path: docs/
           retention-days: 1
           if-no-files-found: error
