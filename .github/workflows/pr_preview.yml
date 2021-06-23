@@ -14,6 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      - uses: potiuk/get-workflow-origin@v1_1
+        id: source-run-info
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sourceRunId: ${{ github.event.workflow_run.id }}
+      - run: echo sourceHeadSha = ${{ steps.source-run-info.outputs.sourceHeadSha }}
+      
       - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
         with:
@@ -26,7 +34,7 @@ jobs:
             console.log("Matching string: " + "build-${{ github.event.workflow_run.head_branch }}")
             var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
             console.log(artifact.name)
-              return artifact.name == "build-${{ github.event.workflow_run.head_branch }}"
+              return artifact.name == "build-${{ steps.source-run-info.outputs.sourceHeadSha }}"
             })[0];
             var download = await github.actions.downloadArtifact({
                owner: context.repo.owner,
@@ -38,13 +46,6 @@ jobs:
             fs.writeFileSync('${{github.workspace}}/docs.zip', Buffer.from(download.data));
       - run: rm -r docs
       - run: unzip -d docs/ docs.zip
-      
-      - uses: potiuk/get-workflow-origin@v1_1
-        id: source-run-info
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          sourceRunId: ${{ github.event.workflow_run.id }}
-      - run: echo sourceHeadSha = ${{ steps.source-run-info.outputs.sourceHeadSha }}
 
       - run: echo Deploy Alias = ${{ steps.source-run-info.outputs.sourceHeadSha }}
       - uses: jsmrcaga/action-netlify-deploy@master
