@@ -22,6 +22,14 @@ jobs:
           sourceRunId: ${{ github.event.workflow_run.id }}
       - run: echo sourceHeadSha = ${{ steps.source-run-info.outputs.sourceHeadSha }}
       
+      - name: Show pending status check
+        uses: Sibz/github-status-action@v1.1.5
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: Netlify preview
+          sha: ${{ steps.source-run-info.outputs.sourceHeadSha }}
+          state: pending
+      
       - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
         with:
@@ -31,9 +39,9 @@ jobs:
                repo: context.repo.repo,
                run_id: ${{github.event.workflow_run.id }},
             });
-            console.log("Matching string: " + "build-${{ github.event.workflow_run.head_branch }}")
+            console.log("Target artifact: " + "build-${{ steps.source-run-info.outputs.sourceHeadSha }}")
             var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-            console.log(artifact.name)
+              console.log("Found artifacts: " + artifact.name)
               return artifact.name == "build-${{ steps.source-run-info.outputs.sourceHeadSha }}"
             })[0];
             var download = await github.actions.downloadArtifact({
